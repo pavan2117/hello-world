@@ -21,8 +21,12 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Build and push Docker image
-        run: |
-          az acr login --name gitacr
-          docker build -f .github/workflows/Dockerfile -t gitacr.azurecr.io/hello-world-app:v1 .github/workflows
-          docker push gitacr.azurecr.io/hello-world-app:v1
+      - name: 'Build and push image'
+          uses: azure/docker-login@v1
+          with:
+            login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+            username: ${{ secrets.REGISTRY_USERNAME }}
+            password: ${{ secrets.REGISTRY_PASSWORD }}
+        - run: |
+            docker build -f .github/workflows/Dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/sampleapp:${{ github.sha }} .github/workflows
+            docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/sampleapp:${{ github.sha }}
