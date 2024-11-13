@@ -24,5 +24,5 @@ jobs:
       - name: Build and push Docker image
         run: |
           az acr login --name gitacr
-          docker build -t gitacr.azurecr.io/hello-world-app:v1 -f .github/workflows/Dockerfile
+          docker build -f .github/workflows/Dockerfile -t gitacr.azurecr.io/hello-world-app:v1 .github/workflows
           docker push gitacr.azurecr.io/hello-world-app:v1
